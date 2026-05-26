@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WASM_DIR="/root/workspace/maplestory-wasm"
+DEV_DIR="/opt/buns-dev"
+BUNSMS_DIR="/root/workspace/bunsms"
+
+echo "========================================"
+echo "  BunsMS WASM Dev Build & Deploy"
+echo "========================================"
+echo ""
+
+cd "$WASM_DIR"
+echo "Building WASM client..."
+
+if command -v emcmake &>/dev/null; then
+    bash scripts/build_wasm.sh
+else
+    echo "   Docker build..."
+    bash scripts/docker_build_wasm.sh
+fi
+
+echo "   Build complete"
+echo ""
+echo "Deploying to dev server..."
+cp build/JourneyClient.js   "$DEV_DIR/build/"
+cp build/JourneyClient.wasm "$DEV_DIR/build/"
+systemctl restart buns-web-dev
+echo "   Deployed to dev.buns.asslorde.com"
+echo ""
+
+for arg in "$@"; do
+    if [ "$arg" = "--push" ]; then
+        echo "Pushing fork..."
+        cd "$WASM_DIR"
+        SHA=$(git rev-parse HEAD 2>/dev/null || echo "no-commits")
+        git add -A
+        git commit -m "dev build $(date +%Y-%m-%d_%H:%M)" 2>/dev/null || true
+        git push
+        cd "$BUNSMS_DIR"
+        git add web-client/vendor/maplestory-wasm
+        git commit -m "update wasm: $SHA" 2>/dev/null || true
+        git push
+        echo "   Pushed"
+    fi
+done

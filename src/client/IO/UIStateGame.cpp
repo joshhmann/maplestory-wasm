@@ -256,6 +256,16 @@ namespace jrc
                     if (auto statusbar = UI::get().get_element<UIStatusbar>())
                         statusbar->set_chat_target(UIChatbar::CHT_SQUAD);
                     break;
+                case KeyAction::BUDDYLIST:
+                    // TODO: Implement buddy list UI panel
+                    // Placeholder - will create proper UI later
+                    Stage::get().get_player().send_action(KeyAction::BUDDYLIST, true);
+                    Stage::get().get_player().send_action(KeyAction::BUDDYLIST, false);
+                    break;
+                case KeyAction::QUESTLOG:
+                    // TODO: Implement quest log UI panel
+                    // Quests are tracked server-side, this will open the quest window
+                    break;
                 case KeyAction::PARTY:
                     emplace<UIParty>();
                     break;

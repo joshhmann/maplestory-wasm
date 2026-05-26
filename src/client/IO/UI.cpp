@@ -264,11 +264,24 @@ namespace jrc
             {
                 state->send_key(mapping.type, mapping.action, pressed, escape);
             }
-            else if (pressed && keycode == GLFW_KEY_P)
+            else if (pressed)
             {
-                // Some server keymaps leave Party unbound; keep the expected
-                // default hotkey behavior for opening the Party UI.
-                state->send_key(KeyType::MENU, KeyAction::PARTY, true, false);
+                // Some server keymaps leave common menu actions unbound.
+                // Keep expected default hotkey behavior as fallbacks.
+                switch (keycode)
+                {
+                case GLFW_KEY_P:
+                    state->send_key(KeyType::MENU, KeyAction::PARTY, true, false);
+                    break;
+                case GLFW_KEY_B:
+                    state->send_key(KeyType::MENU, KeyAction::BUDDYLIST, true, false);
+                    break;
+                case GLFW_KEY_Q:
+                    state->send_key(KeyType::MENU, KeyAction::QUESTLOG, true, false);
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
