@@ -51,7 +51,8 @@ namespace jrc
             const std::string& text,
             int32_t num_def = 0,
             int32_t num_min = 0,
-            int32_t num_max = 0
+            int32_t num_max = 0,
+            const std::vector<int32_t>& style_ids = {}
         );
 
     protected:
@@ -64,6 +65,7 @@ namespace jrc
             YES_NO,
             ACCEPT_DECLINE,
             SELECTION,
+            STYLE,
             TEXTFIELD,
             UNKNOWN
         };

@@ -343,6 +343,9 @@ namespace jrc
             // getNPCTalkNum — numeric input (meso amounts, item quantities).
             // Reuse the textfield for number entry; min/max enforced server-side.
             return DialogueMode::TEXTFIELD;
+        case 7:
+            // sendStyle — hair/face style picker. Show as a selection list.
+            return DialogueMode::STYLE;
         case 12:
         case 14:
             return DialogueMode::ACCEPT_DECLINE;
@@ -540,7 +543,8 @@ namespace jrc
         const std::string& tx,
         int32_t num_def,
         int32_t num_min,
-        int32_t num_max
+        int32_t num_max,
+        const std::vector<int32_t>& style_ids
     )
     {
         std::string processed_tx = replace_macros(tx);
@@ -561,6 +565,21 @@ namespace jrc
             for (const std::string& option_text : selection_texts)
             {
                 selection_labels.emplace_back(Text::A12M, Text::LEFT, Text::BLUE, option_text, TEXT_WIDTH, false);
+            }
+            refresh_selection_styles();
+        }
+        else if (dialogue_mode == DialogueMode::STYLE)
+        {
+            prompttext = strip_npc_tokens(processed_tx);
+            // Build fake selection list from style IDs
+            selection_texts.clear();
+            for (auto sid : style_ids)
+                selection_texts.push_back(std::to_string(sid));
+            text = { Text::A12M, Text::LEFT, Text::DARKGREY, prompttext, TEXT_WIDTH, false };
+            selection_labels.reserve(selection_texts.size());
+            for (const std::string& opt : selection_texts)
+            {
+                selection_labels.emplace_back(Text::A12M, Text::LEFT, Text::BLUE, opt, TEXT_WIDTH, false);
             }
             refresh_selection_styles();
         }
@@ -681,6 +700,7 @@ namespace jrc
             place_button_from_right(NO);
             place_button_from_right(YES);
             break;
+        case DialogueMode::STYLE:
         case DialogueMode::SELECTION:
             place_button_from_right(OK);
             place_button_from_right(NEXT);

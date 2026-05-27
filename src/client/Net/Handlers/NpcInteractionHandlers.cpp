@@ -199,11 +199,21 @@ namespace jrc
             num_max = recv.read_int();
         }
 
+        // Style picker (msgtype 7) — reads style count + style IDs array.
+        int8_t style_count = 0;
+        std::vector<int32_t> style_ids;
+        if (msgtype == 7 && recv.length() >= 1)
+        {
+            style_count = recv.read_byte();
+            for (int i = 0; i < style_count && recv.length() >= 4; ++i)
+                style_ids.push_back(recv.read_int());
+        }
+
         UI::get().emplace<UINpcTalk>();
         UI::get().enable();
 
         if (auto npctalk = UI::get().get_element<UINpcTalk>())
-            npctalk->change_text(npcid, msgtype, style, has_navigation_flags, speaker, text, num_def, num_min, num_max);
+            npctalk->change_text(npcid, msgtype, style, has_navigation_flags, speaker, text, num_def, num_min, num_max, style_ids);
     }
 
 
