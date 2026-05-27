@@ -48,7 +48,10 @@ namespace jrc
             int16_t style,
             bool has_navigation_flags,
             int8_t speaker,
-            const std::string& text
+            const std::string& text,
+            int32_t num_def = 0,
+            int32_t num_min = 0,
+            int32_t num_max = 0
         );
 
     protected:

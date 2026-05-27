@@ -75,6 +75,7 @@ namespace jrc
             PARTY,
             MINIMAP,
             WORLDMAP,
+            QUESTLOG,
             NUM_TYPES
         };
 

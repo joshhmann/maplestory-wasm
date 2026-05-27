@@ -32,6 +32,11 @@ namespace jrc
         bool is_started(int16_t);
         int16_t get_last_started();
 
+        // Accessors for UI enumeration
+        const std::map<int16_t, std::string>& get_started() const { return started; }
+        const std::map<int16_t, std::pair<int16_t, std::string>>& get_in_progress() const { return in_progress; }
+        const std::map<int16_t, int64_t>& get_completed() const { return completed; }
+
     private:
         std::map<int16_t, std::string> started;
         std::map<int16_t, std::pair<int16_t, std::string>> in_progress;

@@ -21,6 +21,7 @@
 #include "UITypes/UIStatusMessenger.h"
 #include "UITypes/UIStatusBar.h"
 #include "UITypes/UIBuffList.h"
+#include "UITypes/UIQuestLog.h"
 #include "UITypes/UINpcTalk.h"
 #include "UITypes/UIShop.h"
 #include "UITypes/UIStorage.h"
@@ -263,8 +264,9 @@ namespace jrc
                     Stage::get().get_player().send_action(KeyAction::BUDDYLIST, false);
                     break;
                 case KeyAction::QUESTLOG:
-                    // TODO: Implement quest log UI panel
-                    // Quests are tracked server-side, this will open the quest window
+                    emplace<UIQuestLog>(
+                        Stage::get().get_player().get_quests()
+                    );
                     break;
                 case KeyAction::PARTY:
                     emplace<UIParty>();

@@ -187,11 +187,23 @@ namespace jrc
                 recv.read_int(); // min/max packed
         }
 
+        // getNum (msgtype 3) sends default value and min/max range.
+        // Consume them and pass to the NPC dialog for number input.
+        int32_t num_def = 0;
+        int32_t num_min = 0;
+        int32_t num_max = 0;
+        if (msgtype == 3 && recv.length() >= 12)
+        {
+            num_def = recv.read_int();
+            num_min = recv.read_int();
+            num_max = recv.read_int();
+        }
+
         UI::get().emplace<UINpcTalk>();
         UI::get().enable();
 
         if (auto npctalk = UI::get().get_element<UINpcTalk>())
-            npctalk->change_text(npcid, msgtype, style, has_navigation_flags, speaker, text);
+            npctalk->change_text(npcid, msgtype, style, has_navigation_flags, speaker, text, num_def, num_min, num_max);
     }
 
 

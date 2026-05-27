@@ -339,6 +339,10 @@ namespace jrc
         case 2:
             // sendGetText — free-form text input from the player.
             return DialogueMode::TEXTFIELD;
+        case 3:
+            // getNPCTalkNum — numeric input (meso amounts, item quantities).
+            // Reuse the textfield for number entry; min/max enforced server-side.
+            return DialogueMode::TEXTFIELD;
         case 12:
         case 14:
             return DialogueMode::ACCEPT_DECLINE;
@@ -533,7 +537,10 @@ namespace jrc
         int16_t style,
         bool has_navigation_flags,
         int8_t speakerbyte,
-        const std::string& tx
+        const std::string& tx,
+        int32_t num_def,
+        int32_t num_min,
+        int32_t num_max
     )
     {
         std::string processed_tx = replace_macros(tx);
@@ -641,6 +648,10 @@ namespace jrc
                 tf_y, tf_y + TEXTFIELD_HEIGHT);
             textfield = Textfield(
                 Text::A12M, Text::LEFT, Text::BLACK, tf_area, 100);
+            // For numeric input (msgtype 3), pre-fill the default value
+            if (num_def != 0) {
+                textfield.change_text(std::to_string(num_def));
+            }
             textfield.set_enter_callback([this](std::string) {
                 submit_textfield();
             });
