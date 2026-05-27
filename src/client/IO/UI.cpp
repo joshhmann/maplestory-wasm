@@ -277,6 +277,10 @@ namespace jrc
                     state->send_key(KeyType::MENU, KeyAction::BUDDYLIST, true, false);
                     break;
                 case GLFW_KEY_Q:
+                    // Q is typically a skill slot from server keymap — 
+                    // quest log is on HOME key to avoid conflicts.
+                    break;
+                case GLFW_KEY_HOME:
                     state->send_key(KeyType::MENU, KeyAction::QUESTLOG, true, false);
                     break;
                 default:
