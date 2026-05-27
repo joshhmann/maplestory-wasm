@@ -192,9 +192,11 @@ namespace jrc
         }
 
 #ifdef MS_PLATFORM_WASM
+        int winW = EM_ASM_INT({ return window.innerWidth || 1024; });
+        int winH = EM_ASM_INT({ return window.innerHeight || 768; });
         glwnd = glfwCreateWindow(
-            Constants::VIEWWIDTH,
-            Constants::VIEWHEIGHT,
+            winW > 0 ? winW : Constants::VIEWWIDTH,
+            winH > 0 ? winH : Constants::VIEWHEIGHT,
             "Journey",
             fullscreen ? glfwGetPrimaryMonitor() : nullptr,
             nullptr
